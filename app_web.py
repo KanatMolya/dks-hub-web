@@ -52,11 +52,11 @@ def init_db():
 
 init_db()
 
-# Текстовые словари для двуязычного интерфейса
+# Текстовые словари для раздельного русского и английского интерфейса
 TRANSLATIONS = {
     "ru": {
-        "title": "ATYRAU TECHNICAL SOURCING",
-        "subtitle": "VENDOR AUDIT & LOGISTICS | DKS HUB WEB PORTAL",
+        "title": "АТЫРАУ ТЕХНИКАЛЫК СОРСИНГ",
+        "subtitle": "АУДИТ ВЕНДОРОВ И ЛОГИСТИКА | ВЕБ-ПОРТАЛ DKS HUB",
         "add_vendor": "Добавить нового вендора",
         "company_name": "Название компании *",
         "category": "Направление",
@@ -67,7 +67,7 @@ TRANSLATIONS = {
         ),
         "country": "Страна / Адрес",
         "contact_person": "Контактное лицо",
-        "email": "Email",
+        "email": "Электронная почта",
         "phone": "Телефон",
         "file_label": "Файл компании (анкета, КП)",
         "notes": "Примечания / Сайт",
@@ -82,12 +82,12 @@ TRANSLATIONS = {
         "th_file": "Файл",
         "th_actions": "Действия",
         "no_file": "Нет файла",
-        "download": "Файл",
+        "download": "Скачать",
         "delete_confirm": "Удалить этого вендора?",
         "cats": [
-            "1. Industrial (Промышленное)",
-            "2. Commercial & Infrastructure (Бытовое/Строй)",
-            "3. Agro & Food Trade (Пищевое)",
+            "1. Промышленное направление",
+            "2. Коммерческое и инфраструктура",
+            "3. Агро и пищевая торговля",
         ],
     },
     "en": {
@@ -240,7 +240,7 @@ HTML_TEMPLATE = """
                             <td>
                                 <strong class="text-primary">{{ v.name }}</strong>
                                 {% if v.products_activity %}
-                                <div class="small text-dark mt-1 bg-white p-1 rounded border border-info"><strong>Products:</strong> {{ v.products_activity }}</div>
+                                <div class="small text-dark mt-1 bg-white p-1 rounded border border-info"><strong>Продукция / Scope:</strong> {{ v.products_activity }}</div>
                                 {% endif %}
                             </td>
                             <td>{{ v.category }}</td>
