@@ -55,7 +55,7 @@ init_db()
 # Текстовые словари для раздельного русского и английского интерфейса
 TRANSLATIONS = {
     "ru": {
-        "title": "АТЫРАУ ТЕХНИКАЛЫК СОРСИНГ",
+        "title": "ATYRAU TECHNICAL SOURCING",
         "subtitle": "АУДИТ ВЕНДОРОВ И ЛОГИСТИКА | ВЕБ-ПОРТАЛ DKS HUB",
         "add_vendor": "Добавить нового вендора",
         "company_name": "Название компании *",
@@ -152,8 +152,8 @@ HTML_TEMPLATE = """
             </div>
             <div class="mt-3 mt-md-0">
                 <div class="btn-group" role="group">
-                    <a href="/?lang=ru" class="btn btn-sm {% if lang == 'ru' %}btn-primary{% else %}btn-outline-primary{% endif %}">🇷🇺 Русский</a>
-                    <a href="/?lang=en" class="btn btn-sm {% if lang == 'en' %}btn-primary{% else %}btn-outline-primary{% endif %}">🇬🇧 English</a>
+                    <a href="/?lang=ru" class="btn btn-sm {% if lang == 'ru' %}btn-primary{% else %}btn-outline-primary{% endif %}">RU Русский</a>
+                    <a href="/?lang=en" class="btn btn-sm {% if lang == 'en' %}btn-primary{% else %}btn-outline-primary{% endif %}">GB English</a>
                 </div>
             </div>
         </div>
