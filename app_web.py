@@ -19,7 +19,33 @@ def get_db():
   return conn
 
 
-# HTML-шаблон с поддержкой логотипа и адаптивного интерфейса
+# Автоматическая проверка и добавление колонки товаров/деятельности, если её нет
+def init_db():
+  conn = get_db()
+  conn.execute("""
+        CREATE TABLE IF NOT EXISTS vendors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            category TEXT NOT NULL,
+            country TEXT,
+            contact_person TEXT,
+            email TEXT,
+            phone TEXT,
+            file_path TEXT,
+            notes TEXT
+        )
+    """)
+  try:
+    conn.execute("ALTER TABLE vendors ADD COLUMN products_activity TEXT")
+  except sqlite3.OperationalError:
+    pass  # Колонка уже существует
+  conn.commit()
+  conn.close()
+
+
+init_db()
+
+# HTML-шаблон с увеличенным логотипом и полем продукции
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
@@ -32,10 +58,10 @@ HTML_TEMPLATE = """
 </head>
 <body class="bg-light">
     <div class="container my-4">
-        <!-- Шапка с логотипом -->
+        <!-- Шапка с крупным логотипом -->
         <div class="p-4 mb-4 bg-white rounded shadow-sm d-flex align-items-center">
-            <div class="me-3">
-                <img src="/logo" alt="Logo" style="height: 75px; width: 75px; object-fit: contain;" class="rounded">
+            <div class="me-4">
+                <img src="/logo" alt="Logo" style="height: 120px; width: 120px; object-fit: contain;" class="rounded">
             </div>
             <div>
                 <h2 class="text-primary fw-bold mb-0">ATYRAU TECHNICAL SOURCING</h2>
@@ -63,6 +89,10 @@ HTML_TEMPLATE = """
                                 <option>3. Agro & Food Trade (Пищевое)</option>
                             </select>
                         </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold text-dark">📦 Поставляемая продукция / Деятельность</label>
+                            <textarea class="form-control" name="products_activity" rows="2" placeholder="Например: Трубы ПНД, запорная арматура, фланцы, насосное оборудование..."></textarea>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label">Страна / Адрес</label>
                             <input type="text" class="form-control" name="country">
@@ -80,7 +110,7 @@ HTML_TEMPLATE = """
                             <input type="text" class="form-control" name="phone">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Файл компании (анкета, опросный лист)</label>
+                            <label class="form-label">Файл компании (анкета, КП)</label>
                             <input type="file" class="form-control" name="file">
                         </div>
                         <div class="col-md-6">
@@ -106,7 +136,7 @@ HTML_TEMPLATE = """
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
-                            <th>Компания</th>
+                            <th>Компания & Продукция</th>
                             <th>Направление</th>
                             <th>Страна / Адрес</th>
                             <th>Контакты</th>
@@ -118,7 +148,12 @@ HTML_TEMPLATE = """
                         {% for v in vendors %}
                         <tr>
                             <td>{{ v.id }}</td>
-                            <td class="fw-bold">{{ v.name }}</td>
+                            <td>
+                                <strong class="text-primary">{{ v.name }}</strong>
+                                {% if v.products_activity %}
+                                <div class="small text-dark mt-1 bg-white p-1 rounded border border-info"><strong>Товары/Деятельность:</strong> {{ v.products_activity }}</div>
+                                {% endif %}
+                            </td>
                             <td>{{ v.category }}</td>
                             <td>{{ v.country }}</td>
                             <td>{{ v.contact_person }}<br><small class="text-muted">{{ v.email }} | {{ v.phone }}</small></td>
@@ -167,6 +202,7 @@ def logo():
 def add_vendor():
   name = request.form.get("name")
   category = request.form.get("category")
+  products_activity = request.form.get("products_activity")
   country = request.form.get("country")
   contact = request.form.get("contact_person")
   email = request.form.get("email")
@@ -183,10 +219,20 @@ def add_vendor():
   conn = get_db()
   conn.execute(
       """
-        INSERT INTO vendors (name, category, country, contact_person, email, phone, file_path, notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO vendors (name, category, products_activity, country, contact_person, email, phone, file_path, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
-      (name, category, country, contact, email, phone, file_path, notes),
+      (
+          name,
+          category,
+          products_activity,
+          country,
+          contact,
+          email,
+          phone,
+          file_path,
+          notes,
+      ),
   )
   conn.commit()
   conn.close()
