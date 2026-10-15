@@ -84,9 +84,11 @@ TRANSLATIONS = {
         "no_file": "Нет файла",
         "download": "Файл",
         "delete_confirm": "Удалить этого вендора?",
-        "cat_1": "1. Industrial (Промышленное)",
-        "cat_2": "2. Commercial & Infrastructure (Бытовое/Строй)",
-        "cat_3": "3. Agro & Food Trade (Пищевое)",
+        "cats": [
+            "1. Industrial (Промышленное)",
+            "2. Commercial & Infrastructure (Бытовое/Строй)",
+            "3. Agro & Food Trade (Пищевое)",
+        ],
     },
     "en": {
         "title": "ATYRAU TECHNICAL SOURCING",
@@ -117,9 +119,11 @@ TRANSLATIONS = {
         "no_file": "No file",
         "download": "File",
         "delete_confirm": "Delete this vendor?",
-        "cat_1": "1. Industrial",
-        "cat_2": "2. Commercial & Infrastructure",
-        "cat_3": "3. Agro & Food Trade",
+        "cats": [
+            "1. Industrial",
+            "2. Commercial & Infrastructure",
+            "3. Agro & Food Trade",
+        ],
     },
 }
 
@@ -169,9 +173,9 @@ HTML_TEMPLATE = """
                         <div class="col-md-6">
                             <label class="form-label fw-bold">{{ t.category }}</label>
                             <select class="form-select" name="category">
-                                <option value="{{ t.cat_1 }}">{{ t.cat_1 }}</option>
-                                <option value="{{ t.cat_2 }}">{{ t.cat_2 }}</option>
-                                <option value="{{ t.cat_3 }}">{{ t.cat_3 }}</option>
+                                {% for cat in t.cats %}
+                                <option value="{{ cat }}">{{ cat }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-12">
